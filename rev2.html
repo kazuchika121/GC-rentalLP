@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOD-CLEANER-GOLD | 最新デトックスマシン導入支援</title>
+    <meta name="description" content="初期費用を抑えて始められるGOD-CLEANER-GOLD導入支援。最新のデトックスマシンを月額定額で導入可能。">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Shippori Mincho', serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #be185d, #fb7185);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-bg {
+            background: radial-gradient(circle at top right, #ffe4e6, #fff1f2, #ffffff);
+        }
+        /* 数値入力の矢印を消す */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            800: '#9f1239',
+                            900: '#881337',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Icon Components
+        const Icons = {
+            Sparkles: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>,
+            ShieldCheck: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>,
+            TrendingUp: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
+            RefreshCw: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>,
+            ChevronDown: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>,
+            Check: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>,
+            Zap: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+            Calculator: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>,
+            Phone: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
+            Mail: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>,
+            Menu: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>,
+            X: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>,
+            Clock: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+            ArrowRight: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>,
+            FileText: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
+            CreditCard: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>,
+            Truck: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        };
+
+        const { 
+            Sparkles, ShieldCheck, TrendingUp, RefreshCw, ChevronDown, 
+            Check, Zap, Calculator, Phone, Mail, Menu, X, Clock,
+            ArrowRight, FileText, CreditCard, Truck
+        } = Icons;
+
+        // Header Component
+        const Header = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [isScrolled, setIsScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setIsScrolled(window.scrollY > 20);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const navLinks = [
+                { name: '選ばれる理由', href: '#benefits' },
+                { name: 'プラン・価格', href: '#plans' },
+                { name: '導入の流れ', href: '#flow' },
+                { name: '収益シミュレーション', href: '#simulation' },
+            ];
+
+            return (
+                <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 shadow-sm py-3' : 'bg-transparent py-5'}`}>
+                    <div className="container mx-auto px-6 flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                            <Sparkles className="w-6 h-6 text-brand-600" />
+                            <span className="text-2xl font-bold tracking-wide serif text-gray-800">GOD-CLEANER-GOLD</span>
+                        </div>
+                        {/* Desktop Nav */}
+                        <nav className="hidden md:flex items-center gap-8">
+                            {navLinks.map((link) => (
+                                <a key={link.name} href={link.href} className="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">
+                                    {link.name}
+                                </a>
+                            ))}
+                            <a href="#contact" className="px-6 py-2.5 bg-brand-800 text-white text-sm font-medium rounded-full hover:bg-brand-900 transition-all shadow-lg shadow-brand-200">
+                                無料相談・お問い合わせ
+                            </a>
+                        </nav>
+                        {/* Mobile Menu Button */}
+                        <button className="md:hidden text-gray-700" onClick={() => setIsOpen(!isOpen)}>
+                            {isOpen ? <X /> : <Menu />}
+                        </button>
+                    </div>
+                    {/* Mobile Nav */}
+                    {isOpen && (
+                        <div className="absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-lg md:hidden py-4 px-6 flex flex-col gap-4 animate-fadeIn">
+                            {navLinks.map((link) => (
+                                <a key={link.name} href={link.href} className="text-gray-700 py-2 border-b border-gray-50" onClick={() => setIsOpen(false)}>
+                                    {link.name}
+                                </a>
+                            ))}
+                            <a href="#contact" className="w-full text-center py-3 bg-brand-800 text-white rounded-lg" onClick={() => setIsOpen(false)}>
+                                無料相談・お問い合わせ
+                            </a>
+                        </div>
+                    )}
+                </header>
+            );
+        };
+
+        // Hero Component
+        const Hero = () => {
+            return (
+                <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden hero-bg">
+                    <div className="absolute inset-0 bg-white/60"></div> 
+                    
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-800 text-sm font-medium mb-8 animate-fade-in-up">
+                                <span className="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+                                審査通過率95%以上・代理店様キャンペーン実施中
+                            </div>
+                            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                                話題のデトックスマシン<br/>
+                                <span className="gradient-text">GOD-CLEANER-GOLD</span>を<br/>
+                                リスクゼロで導入しませんか？
+                            </h1>
+                            <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+                                購入する時代は終わりました。月額定額制のレンタルシステムで、<br className="hidden md:block"/>
+                                資金繰りの不安なく、最高スペックのデトックス機器をあなたのサロンへ。
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="#simulation" className="px-8 py-4 bg-brand-800 text-white text-lg font-bold rounded-full hover:bg-brand-900 transition-all shadow-xl shadow-brand-200 flex items-center justify-center gap-2">
+                                    <Calculator className="w-5 h-5" />
+                                    収益シミュレーション
+                                </a>
+                                <a href="#plans" className="px-8 py-4 bg-white text-gray-700 border border-gray-200 text-lg font-bold rounded-full hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+                                    料金プランを見る
+                                    <ChevronDown className="w-5 h-5" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Problem Section
+        const Problems = () => {
+            const problems = [
+                { title: "初期費用が高すぎる", desc: "高性能な機器は高額。一括購入やローンは経営リスクが大きく、躊躇してしまう。" },
+                { title: "メンテナンス体制", desc: "故障時の修理費用や、代替機の手配など、導入後のアフターケアが不安。" },
+                { title: "集客につながるか", desc: "導入してもお客様に選ばれるメニューになるか、投資回収できるか確信が持てない。" },
+            ];
+
+            return (
+                <section className="py-20 bg-white">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl font-bold mb-4 text-gray-800">こんなお悩みありませんか？</h2>
+                            <p className="text-gray-500">多くのサロンオーナー様が抱える課題を解決します</p>
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-8">
+                            {problems.map((item, idx) => (
+                                <div key={idx} className="bg-gray-50 p-8 rounded-2xl border border-gray-100 relative group hover:shadow-lg transition-all duration-300">
+                                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-500 border-4 border-white group-hover:bg-brand-100 group-hover:text-brand-600 transition-colors">
+                                        !
+                                    </div>
+                                    <h3 className="text-xl font-bold text-center mt-6 mb-4 text-gray-800">{item.title}</h3>
+                                    <p className="text-gray-600 text-center leading-relaxed">{item.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Benefits Section with Attached Image
+        const Benefits = () => {
+            const features = [
+                {
+                    icon: <Zap className="w-6 h-6 text-brand-600" />,
+                    title: "初期費用を抑えて導入",
+                    desc: "デポジットのみで最新機器を導入できます。手元の現金を残したまま、サロンのサービス品質を向上させることが可能です。"
+                },
+                {
+                    icon: <ShieldCheck className="w-6 h-6 text-brand-600" />,
+                    title: "安心のメンテナンスとサポート",
+                    desc: "万が一のトラブル時も迅速に対応し、営業への影響を最小限に抑えます。"
+                },
+                {
+                    icon: <TrendingUp className="w-6 h-6 text-brand-600" />,
+                    title: "経費計上で節税対策",
+                    desc: "毎月のレンタル料金は全額「経費」として計上可能。減価償却の複雑な計算も不要で、会計処理がシンプルになります。"
+                },
+                {
+                    icon: <RefreshCw className="w-6 h-6 text-brand-600" />,
+                    title: "契約満了後の買取OK!",
+                    desc: "契約期間満了後は、機器本体の買取が可能。ご自身の資金状況に応じて選択可能です。"
+                }
+            ];
+
+            return (
+                <section id="benefits" className="py-20 bg-brand-50">
+                    <div className="container mx-auto px-6">
+                        <div className="grid lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <span className="text-brand-600 font-bold tracking-wider text-sm uppercase">Our Solution</span>
+                                <h2 className="text-3xl lg:text-4xl font-bold mt-2 mb-6 text-gray-900">
+                                    GOD-CLEANER-GOLDが<br/>選ばれる<span className="gradient-text">4つの理由</span>
+                                </h2>
+                                <p className="text-gray-600 mb-8 leading-relaxed">
+                                    単なる「貸し出し」ではありません。私たちはサロン経営のパートナーとして、リスクを最小化し、利益を最大化するための仕組みを提供しています。
+                                </p>
+                                <div className="grid sm:grid-cols-2 gap-6">
+                                    {features.map((feature, idx) => (
+                                        <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-brand-100/50">
+                                            <div className="w-12 h-12 bg-brand-50 rounded-lg flex items-center justify-center mb-4">
+                                                {feature.icon}
+                                            </div>
+                                            <h4 className="font-bold text-lg mb-2 text-gray-800">{feature.title}</h4>
+                                            <p className="text-sm text-gray-600 leading-relaxed">{feature.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            {/* 添付画像表示エリア */}
+                            <div className="relative h-[500px] w-full animate-fade-in-up" style={{animationDelay: '0.3s'}}>
+                                <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-200">
+                                    {/* ユーザー様指定の画像を唯一使用 */}
+                                    <img 
+                                        src="https://github.com/user-attachments/assets/b4794589-37ca-476c-943d-1595fd58d236"
+                                        onError={(e) => {
+                                            e.target.onerror = null; 
+                                            e.target.style.display = 'none'; // 画像が見つからない場合は非表示にし、枠だけ残さない
+                                            e.target.parentNode.style.backgroundColor = '#f3f4f6'; // グレーの背景を表示
+                                            e.target.parentNode.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">Image Not Found</div>';
+                                        }}
+                                        alt="GOD-CLEANER-GOLDの使用風景" 
+                                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
+                                    />
+                                </div>
+
+                                {/* 実績バッジ */}
+                                <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-brand-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-brand-100 p-2 rounded-full">
+                                            <Check className="w-5 h-5 text-brand-600" />
+                                        </div>
+                                        <div>
+                                            <div className="text-xs text-gray-500">導入実績</div>
+                                            <div className="text-lg font-bold text-gray-800">2,000店舗突破</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Plans Section
+        const Plans = () => {
+            const plans = [
+                { 
+                    years: 1, 
+                    title: "1年プラン", 
+                    price: "48,000", 
+                    features: ["短期導入向け", "修理保証付き", "契約満了後返却可"] 
+                },
+                { 
+                    years: 3, 
+                    title: "3年プラン", 
+                    price: "21,000", 
+                    isPopular: true, 
+                    features: ["おすすめプラン", "月々の負担を軽減", "消耗品割引あり"] 
+                },
+                { 
+                    years: 5, 
+                    title: "5年プラン", 
+                    price: "17,000", 
+                    features: ["最安値プラン", "長期安定経営に", "買取オプション優遇"] 
+                }
+            ];
+
+            return (
+                <section id="plans" className="py-20 bg-white">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl font-bold mb-4 text-gray-800">契約期間別料金プラン</h2>
+                            <p className="text-gray-500">サロンの経営計画に合わせて選べる3つのプラン</p>
+                        </div>
+                        
+                        {/* デポジット表示 */}
+                        <div className="max-w-6xl mx-auto mb-8 px-4">
+                            <div className="bg-brand-50 border border-brand-200 rounded-lg p-4 flex items-center justify-center gap-2 text-brand-800 font-bold shadow-sm">
+                                <ShieldCheck className="w-5 h-5" />
+                                <span>デポジット（保証金）: 一律 30,000円（税別）</span>
+                            </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+                            {plans.map((plan, idx) => (
+                                <div key={idx} className={`relative border rounded-2xl p-8 transition-all duration-300 hover:shadow-xl flex flex-col ${plan.isPopular ? 'border-brand-500 shadow-lg bg-brand-50/30 transform md:-translate-y-4' : 'border-gray-200 bg-white'}`}>
+                                    {plan.isPopular && (
+                                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-brand-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md">
+                                            人気No.1
+                                        </div>
+                                    )}
+                                    <div className="text-center mb-6">
+                                        <h3 className="text-xl font-bold text-gray-600 mb-2">{plan.title}</h3>
+                                        <div className="flex items-end justify-center gap-1 text-brand-800">
+                                            <span className="text-sm font-bold mb-2">月額</span>
+                                            <span className="text-4xl font-bold">{plan.price}</span>
+                                            <span className="text-sm font-bold mb-2">円(税別)〜</span>
+                                        </div>
+                                    </div>
+                                    <ul className="space-y-4 mb-8 flex-1">
+                                        {plan.features.map((feat, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-sm text-gray-600">
+                                                <div className="w-5 h-5 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0">
+                                                    <Check className="w-3 h-3 text-brand-600" />
+                                                </div>
+                                                {feat}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <a href="#contact" className={`w-full py-3 rounded-lg text-center font-bold transition-colors ${plan.isPopular ? 'bg-brand-600 text-white hover:bg-brand-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                                        このプランで相談
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mt-12 text-center">
+                            <p className="text-sm text-gray-500 mb-4">※表示価格は概算です。審査結果やオプションにより変動する場合があります。</p>
+                            <a href="#contact" className="inline-flex items-center text-brand-600 font-semibold hover:underline">
+                                詳細な見積もりはこちら <ChevronDown className="w-4 h-4 rotate-[-90deg]" />
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Flow Section
+        const Flow = () => {
+            const steps = [
+                {
+                    icon: <Mail className="w-6 h-6 text-white" />,
+                    title: "お問い合わせ",
+                    desc: "まずはフォームよりお気軽にお問い合わせください。"
+                },
+                {
+                    icon: <FileText className="w-6 h-6 text-white" />,
+                    title: "資料送付",
+                    desc: "サービス内容や利用規約などの詳細資料をお送りします。"
+                },
+                {
+                    icon: <CreditCard className="w-6 h-6 text-white" />,
+                    title: "決済・契約",
+                    desc: "初回のみクレジットカード決済。2ヶ月目以降は口座振替となります。"
+                },
+                {
+                    icon: <Truck className="w-6 h-6 text-white" />,
+                    title: "発送・納品",
+                    desc: "平日15時までの決済確認で当日出荷いたします。"
+                }
+            ];
+
+            return (
+                <section id="flow" className="py-20 bg-gray-50">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl font-bold mb-4 text-gray-800">導入までの流れ</h2>
+                            <p className="text-gray-500">スピーディーな手続きで、最短翌日からご利用いただけます</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-4 gap-8 relative max-w-6xl mx-auto">
+                            {/* Connecting Line (Desktop only) */}
+                            <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gray-200 -z-10 transform -translate-y-1/2"></div>
+
+                            {steps.map((step, idx) => (
+                                <div key={idx} className="relative flex flex-col items-center text-center group">
+                                    <div className="w-16 h-16 rounded-full bg-brand-600 flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10">
+                                        {step.icon}
+                                        <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white border-2 border-brand-600 flex items-center justify-center text-sm font-bold text-brand-600">
+                                            {idx + 1}
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-800 mb-3">{step.title}</h3>
+                                    <p className="text-sm text-gray-600 leading-relaxed px-2">{step.desc}</p>
+                                    
+                                    {/* Arrow for mobile */}
+                                    {idx < steps.length - 1 && (
+                                        <div className="md:hidden mt-6 text-gray-300">
+                                            <ChevronDown className="w-6 h-6" />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Simulation Component (Updated: Light Mode & Fixed Input)
+        const Simulation = () => {
+            // プラン: 1=1年, 3=3年, 5=5年
+            const [selectedPlan, setSelectedPlan] = useState(3); 
+            // 入力値を文字列として扱うことで、空入力を許容する
+            const [menuPrice, setMenuPrice] = useState("4500"); 
+            const [customers, setCustomers] = useState(30); // 月間客数
+
+            // プランごとの月額コスト（新価格）
+            const planCosts = {
+                1: 48000,
+                3: 21000,
+                5: 17000
+            };
+
+            const monthlyCost = planCosts[selectedPlan];
+            // 入力が空の場合は0として計算
+            const priceNum = menuPrice === "" ? 0 : Number(menuPrice);
+            const monthlySales = priceNum * customers;
+            const monthlyProfit = monthlySales - monthlyCost;
+
+            const handlePriceChange = (e) => {
+                setMenuPrice(e.target.value);
+            };
+
+            return (
+                <section id="simulation" className="py-20 bg-white text-gray-800">
+                    <div className="container mx-auto px-6">
+                        <div className="max-w-4xl mx-auto">
+                            <div className="text-center mb-12">
+                                <h2 className="text-3xl font-bold mb-4 text-gray-800">収益シミュレーション</h2>
+                                <p className="text-gray-600">契約プランと稼働数から、月々の利益を試算できます</p>
+                            </div>
+
+                            <div className="bg-brand-50 rounded-2xl p-8 border border-brand-100 shadow-xl">
+                                <div className="grid md:grid-cols-2 gap-12">
+                                    <div className="space-y-8">
+                                        {/* プラン選択 */}
+                                        <div>
+                                            <label className="block text-sm font-bold text-gray-700 mb-3">契約プラン選択</label>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                {[1, 3, 5].map((year) => (
+                                                    <button
+                                                        key={year}
+                                                        onClick={() => setSelectedPlan(year)}
+                                                        className={`py-2 px-4 rounded-lg font-bold text-sm transition-all shadow-sm ${
+                                                            selectedPlan === year 
+                                                            ? 'bg-brand-600 text-white shadow-md ring-2 ring-brand-300' 
+                                                            : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                                        }`}
+                                                    >
+                                                        {year}年プラン
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* 施術単価 */}
+                                        <div>
+                                            <label className="block text-sm font-bold text-gray-700 mb-2">施術単価 (円/回)</label>
+                                            <div className="relative">
+                                                <input 
+                                                    type="number" 
+                                                    value={menuPrice}
+                                                    onChange={handlePriceChange}
+                                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 font-mono text-lg shadow-sm transition-all"
+                                                    placeholder="0"
+                                                />
+                                                <span className="absolute right-4 top-3 text-gray-400">円</span>
+                                            </div>
+                                        </div>
+
+                                        {/* 客数スライダー */}
+                                        <div>
+                                            <label className="flex justify-between text-sm font-bold text-gray-700 mb-4">
+                                                <span>月間施術人数</span>
+                                                <span className="text-brand-600 text-lg">{customers}人</span>
+                                            </label>
+                                            <input 
+                                                type="range" 
+                                                min="5" 
+                                                max="100" 
+                                                step="1"
+                                                value={customers}
+                                                onChange={(e) => setCustomers(Number(e.target.value))}
+                                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-500"
+                                            />
+                                            <div className="flex justify-between text-xs text-gray-500 mt-2">
+                                                <span>5人</span>
+                                                <span>50人</span>
+                                                <span>100人</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 結果表示 */}
+                                    <div className="bg-white rounded-xl p-6 flex flex-col justify-center space-y-6 border border-brand-100 shadow-md relative overflow-hidden">
+                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-300 to-brand-600"></div>
+                                        
+                                        <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                                            <span className="text-gray-600 text-sm">月額コスト目安<br/><span className="text-xs text-gray-400">({selectedPlan}年プラン)</span></span>
+                                            <span className="text-xl font-medium text-gray-800">¥{monthlyCost.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                                            <span className="text-gray-600 text-sm">月間売上想定</span>
+                                            <span className="text-xl font-medium text-gray-800">¥{monthlySales.toLocaleString()}</span>
+                                        </div>
+                                        <div className="pt-2">
+                                            <span className="text-gray-600 text-sm block mb-1">月間想定利益</span>
+                                            <div className="text-4xl font-bold text-brand-600 tracking-tight">
+                                                ¥{monthlyProfit.toLocaleString()}
+                                            </div>
+                                        </div>
+                                        <div className="bg-brand-50 rounded p-3 text-xs text-brand-800 mt-2 border border-brand-100">
+                                            <p>💡 月に <span className="font-bold text-brand-600">{Math.ceil(monthlyCost / (priceNum || 1))}人</span> の施術でコスト回収可能です。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Contact/CTA Section (Updated with new fields and mailto logic)
+        const Contact = () => {
+            const [formData, setFormData] = useState({
+                company: '',
+                name: '',
+                email: '',
+                phone: '',
+                address: '',
+                message: ''
+            });
+
+            const handleChange = (e) => {
+                setFormData({ ...formData, [e.target.name]: e.target.value });
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const subject = encodeURIComponent("【LP問い合わせ】GOD-CLEANER-GOLD導入について");
+                
+                // 本文の作成（追加項目を含む）
+                const bodyContent = 
+                    `会社名/サロン名: ${formData.company}\n` +
+                    `担当者名: ${formData.name}\n` +
+                    `メールアドレス: ${formData.email}\n` +
+                    `電話番号(携帯): ${formData.phone}\n` +
+                    `住所: ${formData.address}\n\n` +
+                    `ご相談内容:\n${formData.message}`;
+                
+                const body = encodeURIComponent(bodyContent);
+                
+                // mailtoリンクを生成して遷移
+                window.location.href = `mailto:ooiri@salonsshien.com?subject=${subject}&body=${body}`;
+            };
+
+            return (
+                <section id="contact" className="py-20 bg-white">
+                    <div className="container mx-auto px-6">
+                        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+                            <div className="grid md:grid-cols-2">
+                                <div className="p-10 bg-brand-800 text-white flex flex-col justify-between">
+                                    <div>
+                                        <h2 className="text-3xl font-bold mb-4">まずは無料相談から</h2>
+                                        <p className="text-brand-100 mb-8">
+                                            「サロンを始める時にどの機器が良いかわからない」「審査が通るか不安」など、どんなことでもお気軽にご相談ください。専任のコンシェルジュが丁寧に対応いたします。
+                                        </p>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <Phone className="w-5 h-5" />
+                                            <span className="text-lg font-bold">0120-977-801</span>
+                                            <span className="text-xs bg-brand-700 px-2 py-1 rounded">平日 10:00-17:00</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <Mail className="w-5 h-5" />
+                                            <span className="text-lg">assist@mindf.jp</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-10 bg-white">
+                                    <form className="space-y-4" onSubmit={handleSubmit}>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">サロン名・会社名 <span className="text-red-500">*</span></label>
+                                            <input 
+                                                type="text" 
+                                                name="company"
+                                                value={formData.company}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" 
+                                                placeholder="例: Salon Beauty" 
+                                                required
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">ご担当者様名 <span className="text-red-500">*</span></label>
+                                            <input 
+                                                type="text" 
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" 
+                                                placeholder="例: 山田 花子" 
+                                                required
+                                            />
+                                        </div>
+                                        
+                                        {/* 追加項目: 住所 & 電話番号 */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">電話番号(携帯) <span className="text-red-500">*</span></label>
+                                                <input 
+                                                    type="tel" 
+                                                    name="phone"
+                                                    value={formData.phone}
+                                                    onChange={handleChange}
+                                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" 
+                                                    placeholder="090-1234-5678" 
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">メールアドレス <span className="text-red-500">*</span></label>
+                                                <input 
+                                                    type="email" 
+                                                    name="email"
+                                                    value={formData.email}
+                                                    onChange={handleChange}
+                                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" 
+                                                    placeholder="info@example.com" 
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">住所 <span className="text-gray-400 text-xs">(任意)</span></label>
+                                            <input 
+                                                type="text" 
+                                                name="address"
+                                                value={formData.address}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" 
+                                                placeholder="例: 東京都千代田区..." 
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">ご相談内容</label>
+                                            <textarea 
+                                                name="message"
+                                                value={formData.message}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all h-24" 
+                                                placeholder="3年プランの詳細を聞きたい、デモ体験希望など"
+                                            ></textarea>
+                                        </div>
+                                        <button type="submit" className="w-full py-3 bg-brand-600 text-white font-bold rounded-lg hover:bg-brand-700 transition-all shadow-md hover:shadow-lg">
+                                            無料で問い合わせる
+                                        </button>
+                                        <p className="text-xs text-gray-500 text-center mt-2">
+                                            ※送信ボタンを押すとメールソフトが起動します。
+                                        </p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Footer
+        const Footer = () => {
+            return (
+                <footer className="bg-gray-900 text-white py-12 border-t border-gray-800">
+                    <div className="container mx-auto px-6 text-center">
+                        <div className="flex items-center justify-center gap-2 mb-6">
+                            <Sparkles className="w-5 h-5 text-brand-600" />
+                            <span className="text-xl font-bold serif">Mindfitness</span>
+                        </div>
+                        <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400 mb-8">
+                            <a href="#" className="hover:text-white transition-colors">運営会社</a>
+                            <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
+                            <a href="#" className="hover:text-white transition-colors">特定商取引法に基づく表記</a>
+                            <a href="#" className="hover:text-white transition-colors">利用規約</a>
+                        </div>
+                        <p className="text-xs text-gray-600">
+                            © 2026 Mindfitness Co.,ltd. All rights reserved.<br/>
+                        </p>
+                    </div>
+                </footer>
+            );
+        };
+
+        const App = () => {
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <Header />
+                    <main>
+                        <Hero />
+                        <Problems />
+                        <Benefits />
+                        <Plans />
+                        <Flow />
+                        <Simulation />
+                        <Contact />
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+    
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</body>
+</html>
