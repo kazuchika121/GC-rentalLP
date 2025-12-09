@@ -6,17 +6,13 @@
     <title>GOD-CLEANER-GOLD | 最新デトックスマシン導入支援</title>
     <meta name="description" content="初期費用を抑えて始められるGOD-CLEANER-GOLD導入支援。最新のデトックスマシンを月額定額で導入可能。">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
@@ -277,14 +273,14 @@
                                 <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-200">
                                     {/* ユーザー様指定の画像を唯一使用 */}
                                     <img 
-                                        src="./lp_main_image.jpg"
+                                        src="https://github.com/user-attachments/assets/22a4e210-5de0-4c54-bff9-f4b7770722af"
                                         onError={(e) => {
                                             e.target.onerror = null; 
                                             e.target.style.display = 'none'; // 画像が見つからない場合は非表示にし、枠だけ残さない
                                             e.target.parentNode.style.backgroundColor = '#f3f4f6'; // グレーの背景を表示
                                             e.target.parentNode.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">Image Not Found</div>';
                                         }}
-                                        alt="GOD-CLEANER-GOLDのあるサロン" 
+                                        alt="GOD-CLEANER-GOLD イメージ" 
                                         className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
                                     />
                                 </div>
@@ -611,7 +607,6 @@
                                     </p>
                                     
                                     {/* Googleフォームへのリンクボタン */}
-                                    {/* 下記の href 属性にご自身のGoogleフォームのURLを設定してください */}
                                     <a 
                                         href="https://forms.gle/3z3Nuh1hUd49kRJJA" 
                                         target="_blank" 
@@ -678,7 +673,6 @@
         root.render(<App />);
     </script>
     
-    <!-- Custom Animation Styles -->
     <style>
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
